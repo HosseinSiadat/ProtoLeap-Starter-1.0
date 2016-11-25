@@ -1,0 +1,397 @@
+﻿<!-- This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
+<Window x:Class="ProtoLeap_Starter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProtoLeap_Starter"
+        mc:Ignorable="d"
+        Title="ProtoLeap Starter" Height="700" Width="620" ResizeMode="NoResize"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="540"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <WrapPanel>
+            <materialDesign:Card MinWidth="200" MinHeight="270" MaxWidth="200" MaxHeight="200" Padding="2,2">
+                <materialDesign:Transitioner SelectedIndex="0">
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="                 ADC Control" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2" 
+                                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Click="BADC_transition">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <ProgressBar Grid.Row="0" Grid.ColumnSpan="3"  x:Name="ADCBar"></ProgressBar>
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="Voltage (0-5V)" x:Name="ADCV"/>
+                                <Button Content="Start" Grid.Row="2" Grid.Column="0"  Click="BADCStart_Click"/>
+                                <Button Content="Stop" Grid.Row="2" Grid.Column="1"  Click="BADCStop_Click"/>
+                                <Button FontSize="10" Content="Motor" Grid.Row="2" Grid.Column="2"  Click="MotorVolt"/>
+                                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Select A Device"/>
+                                <ComboBox Grid.Row="4" Grid.ColumnSpan="3"  x:Name="ADC" SelectedIndex="0"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="          ADC Configuration" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2" 
+                                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBlock Grid.Row="0" Grid.Column="0">SN:</TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" x:Name="ADCSN"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ADCName"/>
+                                <Button Content="Modify" Grid.Row="2" Grid.ColumnSpan="3" x:Name="ADCMod" Click="ADCMod_Click"/>
+                                <Button Content="Disconnect" Grid.Row="3" Grid.ColumnSpan="3" x:Name="ADCDC" Click="ADCDC_Click"/>
+                                <Button Content="Connect" Grid.Row="4" Grid.ColumnSpan="3" x:Name="ADCCON" Click="ADCCON_Click"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+            </materialDesign:Card>
+
+
+            <materialDesign:Card MinWidth="200" MinHeight="270" Padding="2,2">
+                <materialDesign:Transitioner SelectedIndex="0">
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="              Motor Control" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2"
+                                         Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        Click="BMotor_transition">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBox Grid.Row="0" Grid.ColumnSpan="1"  x:Name="TextBoxMOTOR" Text="3.33"/>
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Voltage on Motor: 0V" x:Name="MotorV"/>
+                                <Button Content="Start" Grid.Row="2" Grid.Column="0" Click="MOTON_Click"/>
+                                <Button Content="Stop" Grid.Row="2" Grid.Column="1" Click="MOTOFF_Click"/>
+                                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Select A Device"/>
+                                <ComboBox Grid.Row="4" Grid.ColumnSpan="2" x:Name="Motor" SelectedIndex="0"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="          Motor Configuration" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2" 
+                                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBlock Grid.Row="0" Grid.Column="0">SN:</TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" x:Name="MotorSN"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="MotorName"/>
+                                <Button Content="Modify" Grid.Row="2" Grid.ColumnSpan="3" x:Name="MotorMod" Click="MotorMod_Click"/>
+                                <Button Content="Disconnect" Grid.Row="3" Grid.ColumnSpan="3" x:Name="MotorDC" Click="MotorDC_Click"/>
+                                <Button Content="Connect" Grid.Row="4" Grid.ColumnSpan="3" x:Name="MotorCON" Click="MotorCON_Click"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+            </materialDesign:Card>
+
+
+            <materialDesign:Card MinWidth="200" MinHeight="270" Padding="2,2">
+                <materialDesign:Transitioner SelectedIndex="0">
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="          Temperature Sensor" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2"
+                                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        Click="BTemp_transition">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <ProgressBar Grid.Row="0" Grid.ColumnSpan="3" x:Name="TempBar"/>
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="Temperature: 25.00"  x:Name="Temperature"/>
+                                <Button Content="Start" Grid.Row="2" Grid.Column="0"  Click="BTempStart_Click"/>
+                                <Button Content="Stop" Grid.Row="2" Grid.Column="1"  Click="BTempStop_Click"/>
+                                <Button FontSize="10" Content="7-Seg" Grid.Row="2" Grid.Column="2" Click="TempSegDisplay"/>
+                                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Select A Device"/>
+                                <ComboBox Grid.Row="4" Grid.ColumnSpan="3" x:Name="Temp" SelectedIndex="0"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="    Temp Sensor Configuration" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2" 
+                                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBlock Grid.Row="0" Grid.Column="0">SN:</TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" x:Name="TempSN"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="TempName"/>
+                                <Button Content="Modify" Grid.Row="2" Grid.ColumnSpan="3" x:Name="TempMod" Click="TempMod_Click"/>
+                                <Button Content="Disconnect" Grid.Row="3" Grid.ColumnSpan="3" x:Name="TempDC" Click="TempDC_Click"/>
+                                <Button Content="Connect" Grid.Row="4" Grid.ColumnSpan="3" x:Name="TempCON" Click="TempCON_Click"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+            </materialDesign:Card>
+
+            <materialDesign:Card MinWidth="200" MinHeight="270" Padding="2,2">
+                <materialDesign:Transitioner SelectedIndex="0">
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="               7-Seg Control" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2" 
+                                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        Click="B7seg_transition">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBox Grid.Row="0" Grid.ColumnSpan="1" x:Name="SegNum" Text="9F"/>
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="Two Hexadecimal Numbers"/>
+                                <Button Content="Start" Grid.Row="2" Grid.Column="0" Click="SegStart_Click"/>
+                                <Button Content="Stop" Grid.Row="2" Grid.Column="1" Click="SegStop_Click"/>
+                                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Select A Device"/>
+                                <ComboBox Grid.Row="4" Grid.ColumnSpan="2"  x:Name="SevenSeg" SelectedIndex="0"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="          7-SEG Configuration" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2" 
+                                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBlock Grid.Row="0" Grid.Column="0">SN:</TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" x:Name="SegSN"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="SegName"/>
+                                <Button Content="Modify" Grid.Row="2" Grid.ColumnSpan="3" x:Name="SegMod" Click="SegMod_Click"/>
+                                <Button Content="Disconnect" Grid.Row="3" Grid.ColumnSpan="3" x:Name="SegDC" Click="SegDC_Click"/>
+                                <Button Content="Connect" Grid.Row="4" Grid.ColumnSpan="3" x:Name="SegCON" Click="SegCON_Click"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+            </materialDesign:Card>
+
+
+            <materialDesign:Card MinWidth="200" MinHeight="270" Padding="2,2">
+                <materialDesign:Transitioner SelectedIndex="0">
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="                DAC Control" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2"
+                                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        Click="BDAC_transition">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBox Grid.Row="0" Grid.ColumnSpan="1" x:Name="TextBoxDAC" Text="3.33"/>
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="Voltage (0-5V)"/>
+                                <Button Content="Start" Grid.Row="2" Grid.Column="0"  Click="BDACON_Click"/>
+                                <Button Content="Stop" Grid.Row="2" Grid.Column="1" Click="BDACOFF_Click"/>
+                                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Select A Device"/>
+                                <ComboBox Grid.Row="4" Grid.ColumnSpan="2" x:Name="DacDevice" SelectedIndex="0"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
+                        <GroupBox Header="           DAC Configuration" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="12" Height="12" Grid.Row="0" Grid.Column="2" 
+                                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" 
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                                    <materialDesign:PackIcon Kind="Autorenew" Width="10" Height="10"/>
+                                </Button>
+                                <TextBlock Grid.Row="0" Grid.Column="0">SN:</TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" x:Name="DACSN"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="DACName"/>
+                                <Button Content="Modify" Grid.Row="2" Grid.ColumnSpan="3" x:Name="DACMod" Click="DACMod_Click"/>
+                                <Button Content="Disconnect" Grid.Row="3" Grid.ColumnSpan="3" x:Name="DACDC" Click="DACDC_Click"/>
+                                <Button Content="Connect" Grid.Row="4" Grid.ColumnSpan="3" x:Name="DACCon" Click="DACCon_Click"/>
+                            </Grid>
+                        </GroupBox>
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+
+
+            </materialDesign:Card>
+
+            <materialDesign:Card MinWidth="200" MinHeight="270" Padding="2,2">
+                <Image Source="Logo.png" Height="90" Width="160" Margin="15" Stretch="UniformToFill" />
+            </materialDesign:Card>
+
+
+        </WrapPanel>
+        <materialDesign:Card Grid.Row="1" MaxWidth="604" MinHeight="130" Padding="0,2" Margin="0,0,1,0" >
+            <GroupBox Header="Status Updates" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0">Status:</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="4">Devices Found:</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="5" x:Name="DeviceCount"></TextBlock>
+                    <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="6" x:Name="LastError"/>
+                </Grid>
+            </GroupBox>
+        </materialDesign:Card>
+    </Grid>
+
+</Window>
